@@ -1,0 +1,40 @@
+# Cache gems in between builds
+cache:
+  paths:
+    - node_modules
+    - .yarn
+
+stages: # List of stages for jobs, and their order of execution
+  - build
+  - test
+  - deploy
+
+build-job: # This job runs in the build stage, which runs first.
+  stage: build
+  script:
+    - apt-get update -q && apt-get install nodejs
+    # Install yarn as outlined in (https://yarnpkg.com/lang/en/docs/install/#alternatives-stable)
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
+    # Make available in the current terminal
+    - export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+    - yarn
+    - yarn build
+    - echo 'Build complete'
+
+test-job: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
+  script:
+    - apt-get update -q && apt-get install nodejs
+    # Install yarn as outlined in (https://yarnpkg.com/lang/en/docs/install/#alternatives-stable)
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
+    # Make available in the current terminal
+    - export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+    - yarn
+    - yarn test
+    - echo 'Test complete'
+
+deploy-job: # This job runs in the deploy stage.
+  stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."

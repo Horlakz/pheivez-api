@@ -4,9 +4,9 @@ on:
     branches: [main]
 
 jobs:
-  call-workflow:
+  run-test:
     name: Run Tests
-    uses: ./.github/workflows/run_tests.yml
+    uses: ./.github/workflows/run_tests.yml@main
 
   deploy:
     name: Deploy to Heroku

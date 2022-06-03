@@ -6,7 +6,7 @@ on:
 jobs:
   run-test:
     name: Run Tests
-    uses: ./.github/workflows/run_tests
+    uses: ./.github/workflows/run_tests.yml
 
   deploy:
     name: Deploy to Heroku

@@ -18,14 +18,10 @@ jobs:
           node-version: "14"
 
       - name: Install dependencies
-        uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: install
+        run: npm install
 
       - name: Run tests
-        uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: test
+        run: npm test
 
       - name: Report coverage
         run: echo 'Test Successfully Completed'

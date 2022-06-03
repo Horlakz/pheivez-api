@@ -3,20 +3,19 @@ on:
   push:
     branches: [main]
 
-
 jobs:
   run-test:
     name: Run Tests
     uses: ./.github/workflows/run_tests
-  
+
   deploy:
     name: Deploy to Heroku
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Dir
-      uses: actions/checkout@v2
+      - name: Checkout Dir
+        uses: actions/checkout@v2
 
-    - name: Heroku Deployment
+      - name: Heroku Deployment
         uses: ElayGelbart/Heroku-Auto-Deployment@v1.0.6
         with:
           herokuApiKey: ${{ secrets.HEROKU_API_KEY}}

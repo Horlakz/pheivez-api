@@ -3,6 +3,9 @@ on:
   push:
     branches: [main]
 
+on:
+  workflow_call:
+  
 jobs:
   run-test:
     name: Run Tests

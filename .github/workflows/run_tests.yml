@@ -1,6 +1,9 @@
 name: Run Test
 on: [push]
 
+env:
+  MONGO_URI: ${{ secrets.MONGO_URI }}
+
 jobs:
   run-tests:
     name: Run Tests

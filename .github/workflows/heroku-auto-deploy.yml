@@ -6,7 +6,24 @@ on:
 jobs:
   run-test:
     name: Run Tests
-    uses: ./.github/workflows/run_tests.yml@main
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js version 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Report coverage
+        run: echo 'Test Successfully Completed'
 
   deploy:
     name: Deploy to Heroku

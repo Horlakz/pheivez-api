@@ -3,6 +3,9 @@ on:
   push:
     branches: [main]
 
+env:
+  MONGO_URI: ${{ secrets.MONGO_URI }}
+
 jobs:
   run-test:
     name: Run Tests

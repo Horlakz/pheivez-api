@@ -2,22 +2,23 @@ name: Deploy on Push to Heroku
 on:
   push:
     branches: [main]
+
+on: 
   workflow_call:
+    jobs:
+      run-test:
+        name: Run Tests
+        uses: ./.github/workflows/run_tests.yml
 
-jobs:
-  run-test:
-    name: Run Tests
-    uses: ./.github/workflows/run_tests.yml
+      deploy:
+        name: Deploy to Heroku
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout Dir
+            uses: actions/checkout@v2
 
-  deploy:
-    name: Deploy to Heroku
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Dir
-        uses: actions/checkout@v2
-
-      - name: Heroku Deployment
-        uses: ElayGelbart/Heroku-Auto-Deployment@v1.0.6
-        with:
-          herokuApiKey: ${{ secrets.HEROKU_API_KEY}}
-          herokuAppName: ${{ secrets.HEROKU_APP_NAME}}
+          - name: Heroku Deployment
+            uses: ElayGelbart/Heroku-Auto-Deployment@v1.0.6
+            with:
+              herokuApiKey: ${{ secrets.HEROKU_API_KEY}}
+              herokuAppName: ${{ secrets.HEROKU_APP_NAME}}

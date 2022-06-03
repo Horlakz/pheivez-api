@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/index",
     "dev": "nodemon src/index",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "test": "vitest"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

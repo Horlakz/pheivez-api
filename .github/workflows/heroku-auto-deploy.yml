@@ -15,7 +15,8 @@ jobs:
     steps:
     - name: Checkout Dir
         uses: actions/checkout@v2
-      - name: Heroku Deployment
+
+    - name: Heroku Deployment
         uses: ElayGelbart/Heroku-Auto-Deployment@v1.0.6
         with:
           herokuApiKey: ${{ secrets.HEROKU_API_KEY}}

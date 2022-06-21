@@ -3,7 +3,7 @@ import { it } from "vitest";
 import "dotenv/config";
 
 it("it should connect to database", async () => {
-  let URI: string | undefined = process.env.MONGO_URI;
+  const URI: string | undefined = process.env.MONGO_URI;
 
   await connect(`${URI}`, {
     useNewUrlParser: true,

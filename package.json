@@ -7,7 +7,7 @@
     "start": "node build/index",
     "dev": "nodemon src/index",
     "build": "tsc -p .",
-    "heroku-postbuild": "tsc -p .",
+    "heroku-postbuild": "node build/index",
     "test": "vitest run",
     "test:watch": "vitest"
   },

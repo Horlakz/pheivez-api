@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node build/index",
     "dev": "nodemon src/index",
-    "heroku-postbuild": "tsc",
+    "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest"
   },

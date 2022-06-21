@@ -2,7 +2,7 @@
 // import express and types
 import express, { Application } from "express";
 
-import "dotenv/config";
+import "dotenv";
 import middlewares from "./middlewares";
 import routes from "./routes/testRoute";
 import connectDB from "./config/db";

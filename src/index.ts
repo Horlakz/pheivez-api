@@ -5,7 +5,7 @@ import logger from "morgan";
 import "dotenv/config";
 
 // import functions
-import routes from "./routes/testRoute";
+import routes from "./routes";
 import { appError } from "./middlewares/error";
 import connectDB from "./config/db";
 
@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(logger("dev"));
 }
 
-// cors
+// cors middleware
 app.use(
   cors({
     origin:
@@ -32,7 +32,7 @@ app.use(
   })
 );
 
-// routes
+// routes middeware
 app.use("/api/v1/", routes);
 
 // error handler

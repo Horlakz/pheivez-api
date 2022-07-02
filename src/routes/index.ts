@@ -2,13 +2,13 @@
 import { Router } from "express";
 
 // app routes
-import testRouter from "./testRoute";
+import userRoutes from "./userRoute";
 
 // initialize express router
 const router = Router();
 
 // mount routes
-router.use("/test", testRouter);
+router.use("/auth", userRoutes);
 
 // export router
 export default router;

@@ -1,5 +1,4 @@
 import { connect, ConnectOptions } from "mongoose";
-import "colors";
 
 // import URI from .env
 const URI: string | undefined = process.env.MONGO_URI;
@@ -11,7 +10,7 @@ const connectDB = async () => {
       useUnifiedTopology: true,
     } as ConnectOptions);
 
-    console.log(`Database connected successfully`.cyan.bold);
+    console.log("Database connected successfully");
   } catch (err: any) {
     console.log(err.message.red);
     process.exit(1);

@@ -7,3 +7,9 @@ namespace NodeJS {
     JWT_EXPIRES_IN: string;
   }
 }
+
+declare namespace Express {
+  export interface Request {
+    user: any;
+  }
+}

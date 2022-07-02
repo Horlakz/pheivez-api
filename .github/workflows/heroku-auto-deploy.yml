@@ -1,7 +1,7 @@
 name: Deploy on Push to Heroku
 on:
   push:
-    branches: [dev]
+    branches: [main]
 
 env:
   MONGO_URI: ${{ secrets.MONGO_URI }}

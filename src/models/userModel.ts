@@ -1,16 +1,24 @@
-import { Schema, model } from "mongoose";
+import { Model, Schema, HydratedDocument, model } from "mongoose";
 import bcrypt from "bcryptjs";
 
 interface User {
-  isModified: any;
   name: string;
   email: string;
   password: string;
   createdAt: Date;
   updatedAt: Date;
+  isModified: any;
 }
 
-const userSchema = new Schema<User>({
+interface UserMethods {
+  matchPassword: (password: string) => Promise<boolean>;
+}
+
+interface UserModel extends Model<User, {}, UserMethods> {
+  userExists(email: string): Promise<HydratedDocument<User, UserMethods>>;
+}
+
+const userSchema = new Schema<User, UserModel, UserMethods>({
   name: {
     type: String,
     required: [true, "Name is required"],
@@ -67,4 +75,4 @@ userSchema.methods.matchPassword = async function (password: string) {
   return await bcrypt.compare(password, this.password);
 };
 
-export default model<User>("User", userSchema);
+export default model<User, UserModel>("User", userSchema);

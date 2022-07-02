@@ -1,10 +1,12 @@
-// all imports
-// import express and types
+// import express and other dependencies
 import express, { Application } from "express";
 import cors from "cors";
 import logger from "morgan";
 import "dotenv/config";
+
+// import functions
 import routes from "./routes/testRoute";
+import { appError } from "./middlewares/error";
 import connectDB from "./config/db";
 
 // connect to database
@@ -32,6 +34,9 @@ app.use(
 
 // routes
 app.use("/api/v1/", routes);
+
+// error handler
+app.use(appError);
 
 // set port
 const port: string | number = process.env.PORT || 8000;

@@ -7,7 +7,7 @@ import testDemo from "../controllers/testController";
 const router = Router();
 
 // create route
-router.get("/test", testDemo);
+router.get("/", testDemo);
 
 // export route(s)
 export default router;

@@ -15,6 +15,7 @@ interface UserMethods {
 }
 
 interface UserModel extends Model<User, {}, UserMethods> {
+  matchPassword: (password: string) => Promise<boolean>;
   userExists(email: string): Promise<HydratedDocument<User, UserMethods>>;
 }
 

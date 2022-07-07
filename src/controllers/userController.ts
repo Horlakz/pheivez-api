@@ -48,7 +48,7 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 
     // send response
     res.status(200).json({
-      token: generateToken(await (await User.userExists(email))._id),
+      token: generateToken((await User.userExists(email))._id),
     });
   } catch (err: any) {
     res.status(400).json({

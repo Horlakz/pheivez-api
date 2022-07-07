@@ -13,7 +13,7 @@ const router = Router();
 // create route
 router.post("/register", register);
 router.post("/login", login);
-router.get("/me", protect, getUser);
+router.get("/user", protect, getUser);
 
 // export route(s)
 export default router;

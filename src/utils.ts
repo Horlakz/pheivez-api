@@ -1,9 +1,9 @@
 import type { Types } from "mongoose";
-import jwt from "jsonwebtoken";
+import { sign, Secret } from "jsonwebtoken";
 
 // generate token function
 const generateToken = (id: Types.ObjectId) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, {
+  sign({ id }, process.env.JWT_SECRET as Secret, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 

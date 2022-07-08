@@ -18,7 +18,9 @@ export const sendEmail = async (
   html: HTMLElement
 ) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.sendgrid.net",
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASSWORD,
@@ -26,7 +28,7 @@ export const sendEmail = async (
   });
 
   const mailOptions: nodemailer.SendMailOptions = {
-    from: `"Pheivez Arts" <${process.env.EMAIL_USER}>`,
+    from: `"Pheivez Arts" <${process.env.EMAIL}>`,
     to: email,
     subject,
     html,

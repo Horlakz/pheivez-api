@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 // app routes
-import userRoutes from "./userRoute";
+import userRoutes from "./user";
 
 // initialize express router
 const router = Router();

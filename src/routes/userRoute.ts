@@ -2,7 +2,13 @@
 import { Router } from "express";
 
 // get controllers
-import { register, login, getUser, forgotPassword } from "../controllers/user";
+import {
+  register,
+  login,
+  getUser,
+  forgotPassword,
+  resetPassword,
+} from "../controllers/user";
 
 // middlewares
 import { protect } from "../middlewares/auth";
@@ -15,6 +21,7 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/user", protect, getUser);
 router.post("/forgot-password", forgotPassword);
+router.put("/reset-password", resetPassword);
 
 // export route(s)
 export default router;

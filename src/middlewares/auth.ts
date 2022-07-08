@@ -49,6 +49,5 @@ export const protect = async (
       message: "Authentication Failed",
       error: err.message,
     });
-    process.exit(1);
   }
 };

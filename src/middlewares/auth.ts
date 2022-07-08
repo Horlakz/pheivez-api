@@ -1,6 +1,6 @@
 import { verify } from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
-import User from "../models/userModel";
+import User from "../models/user";
 
 interface JwtPayload {
   id: string;

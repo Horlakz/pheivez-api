@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 // get controllers
-import { register, login, getUser } from "../controllers/userController";
+import { register, login, getUser, forgotPassword } from "../controllers/user";
 
 // middlewares
 import { protect } from "../middlewares/auth";
@@ -14,6 +14,7 @@ const router = Router();
 router.post("/register", register);
 router.post("/login", login);
 router.get("/user", protect, getUser);
+router.post("/forgot-password", forgotPassword);
 
 // export route(s)
 export default router;

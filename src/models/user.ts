@@ -9,16 +9,7 @@ interface User extends Document {
   updatedAt: Date;
 }
 
-interface UserMethods {
-  matchPassword: (password: string) => Promise<boolean>;
-}
-
-interface UserModel extends Model<User, {}, UserMethods> {
-  matchPassword: (password: string) => Promise<boolean>;
-  userExists(email: string): Promise<HydratedDocument<User, UserMethods>>;
-}
-
-const userSchema = new Schema<User, UserModel, UserMethods>(
+const userSchema = new Schema<User>(
   {
     name: {
       type: String,
@@ -67,17 +58,12 @@ userSchema.pre<User>("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
-  const salt: string = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+
+  if (this.isModified("password")) {
+    const salt: string = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
   next();
 });
 
-userSchema.statics.userExists = function (email: string) {
-  return this.exists({ email });
-};
-
-userSchema.methods.matchPassword = async function (password: string) {
-  return await bcrypt.compare(password, this.password);
-};
-
-export default model<User, UserModel>("User", userSchema);
+export default model<User>("User", userSchema);

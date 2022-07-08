@@ -10,6 +10,7 @@ const codeSchema = new Schema<Code>(
     user: {
       type: Schema.Types.ObjectId,
       required: [true, "User is required"],
+      unique: true,
       ref: "User",
     },
     code: {

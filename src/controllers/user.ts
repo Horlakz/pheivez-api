@@ -1,13 +1,15 @@
 import type { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
+import bcrypt from "bcryptjs";
 import User from "../models/user";
+import Code from "../models/code";
 import { generateToken, sendEmail } from "../utils";
 
 // @desc create user
 // @route /auth/register
 // @method POST
 // @access Public
-const register = asyncHandler(async (req: Request, res: Response) => {
+export const register = asyncHandler(async (req: Request, res: Response) => {
   // get inputs
   const { name, email, password } = req.body;
 
@@ -22,8 +24,6 @@ const register = asyncHandler(async (req: Request, res: Response) => {
     res.status(400).json({
       message: err.message,
     });
-
-    console.log(err);
   }
 });
 
@@ -31,25 +31,28 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 // @route /auth/login
 // @method POST
 // @access Public
-const login = asyncHandler(async (req: Request, res: Response) => {
+export const login = asyncHandler(async (req: Request, res: Response) => {
   // get inputs
   const { email, password } = req.body;
 
   try {
     // match user
-    const user =
-      (await User.userExists(email)) && (await User.matchPassword(password));
+    const user = await User.findOne({ email });
 
-    if (user == null || user == undefined) {
+    // match password
+    const isMatch = user && (await bcrypt.compare(password, user.password));
+
+    if (!isMatch) {
       res.status(400).json({
         message: "Invalid email or password",
       });
     }
 
     // send response
-    res.status(200).json({
-      token: generateToken((await User.userExists(email))._id),
-    });
+    isMatch &&
+      res.status(200).json({
+        token: generateToken(user._id),
+      });
   } catch (err: any) {
     res.status(400).json({
       message: err.message,
@@ -63,7 +66,7 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 // @route /auth/me
 // @method GET
 // @access Private
-const getUser = asyncHandler(async (req: Request, res: Response) => {
+export const getUser = asyncHandler(async (req: Request, res: Response) => {
   try {
     // const user = await User.findById(req.user.id);
     res.status(200).json(req.user);
@@ -79,38 +82,105 @@ const getUser = asyncHandler(async (req: Request, res: Response) => {
 // @route /auth/forgot-password
 // @method POST
 // @access Public
-const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
-  // get inputs
-  const { email } = req.body;
+export const forgotPassword = asyncHandler(
+  async (req: Request, res: Response) => {
+    // get inputs
+    const { email } = req.body;
 
-  try {
-    // match user
-    const user = await User.findOne({ email });
+    try {
+      // match user
+      const user = await User.findOne({ email });
 
-    if (user == null || user == undefined) {
+      if (user === null || user === undefined) {
+        res.status(400).json({
+          message: "Email is not registered",
+        });
+      }
+
+      // generate 6 digit code
+      const code = Math.floor(Math.random() * 900000) + 100000;
+
+      // send email
+      await sendEmail(
+        email,
+        "Reset Password",
+        `<p>You requested to reset your password. Your code is ${code}</p>`
+      );
+
+      // if code exists, update it
+      // const codeExists = user && (await Code.findOne({ user: user._id }));
+      // if (codeExists) {
+      //   // update code
+      //   await Code.findOneAndUpdate(
+      //     { user: user._id },
+      //     { code },
+      //     { new: true }
+      //   );
+
+      //   // send email
+      //   await sendEmail(
+      //     email,
+      //     "Reset Password",
+      //     `<p>You requested to reset your password. Your code is ${code}</p>`
+      //   );
+      // }
+
+      // save code to database
+      user && (await Code.create({ user: user._id, code }));
+
+      // send response
+      res.status(200).json({ message: `code sent to ${email}` });
+    } catch (err: any) {
       res.status(400).json({
-        message: "Email is not registered",
+        message: err.message,
       });
+      console.log(err);
     }
-
-    // generate 6 digit code
-    const code = Math.floor(Math.random() * 900000) + 100000;
-
-    // send email
-    const send = await sendEmail(
-      email,
-      "Reset Password",
-      `<p>You requested to reset your password. Your code is ${code}</p>`
-    );
-
-    // send response
-    res.status(200).json({ message: `code sent to ${email}` });
-  } catch (err: any) {
-    res.status(400).json({
-      message: err.message,
-    });
-    console.log(err);
   }
-});
+);
 
-export { register, login, getUser, forgotPassword };
+// @desc use code to reset password
+// @route /auth/reset-password
+// @method PUT
+// @access Public
+export const resetPassword = asyncHandler(
+  async (req: Request, res: Response) => {
+    // get inputs
+    const { email, code, password } = req.body;
+
+    try {
+      // match user
+      const user = await User.findOne({ email });
+
+      if (user === null || user === undefined) {
+        res.status(400).json({
+          message: "Email is not registered",
+        });
+      }
+
+      // match code
+      const codeExists = user && (await Code.findOne({ user: user._id }));
+      if (codeExists) {
+        if (codeExists.code !== code) {
+          res.status(400).json({
+            message: "Invalid code",
+          });
+        }
+      }
+
+      // update password
+      await User.updateOne({ email }, { password });
+
+      // delete code
+      user && (await Code.findOneAndRemove({ user: user._id }));
+
+      // send response
+      res.status(200).json({ message: "password updated" });
+    } catch (err: any) {
+      res.status(400).json({
+        message: err.message,
+      });
+      console.log(err);
+    }
+  }
+);

@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
-import User from "../models/userModel";
-import { generateToken } from "../utils";
+import User from "../models/user";
+import { generateToken, sendEmail } from "../utils";
 
 // @desc create user
 // @route /auth/register
@@ -75,4 +75,42 @@ const getUser = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-export { register, login, getUser };
+// @desc send code to reset password
+// @route /auth/forgot-password
+// @method POST
+// @access Public
+const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
+  // get inputs
+  const { email } = req.body;
+
+  try {
+    // match user
+    const user = await User.findOne({ email });
+
+    if (user == null || user == undefined) {
+      res.status(400).json({
+        message: "Email is not registered",
+      });
+    }
+
+    // generate 6 digit code
+    const code = Math.floor(Math.random() * 900000) + 100000;
+
+    // send email
+    const send = await sendEmail(
+      email,
+      "Reset Password",
+      `<p>You requested to reset your password. Your code is ${code}</p>`
+    );
+
+    // send response
+    res.status(200).json({ message: `code sent to ${email}` });
+  } catch (err: any) {
+    res.status(400).json({
+      message: err.message,
+    });
+    console.log(err);
+  }
+});
+
+export { register, login, getUser, forgotPassword };

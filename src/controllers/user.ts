@@ -158,24 +158,31 @@ export const resetPassword = asyncHandler(
         });
       }
 
-      // match code
-      const codeExists = user && (await Code.findOne({ user: user._id }));
-      if (codeExists) {
-        if (codeExists.code !== code) {
+      if (user) {
+        const codeExists = await Code.findOne({ user: user._id });
+
+        if (!codeExists) {
           res.status(400).json({
-            message: "Invalid code",
+            message: "Code does not exist",
           });
         }
+
+        if (codeExists) {
+          if (codeExists.code !== code) {
+            res.status(400).json({
+              message: "Invalid code",
+            });
+          }
+
+          // user["password"] = password;
+          // await user.save();
+
+          await Code.findOneAndRemove({ user: user._id });
+
+          // send response
+          res.status(200).json({ message: "password updated" });
+        }
       }
-
-      // update password
-      await User.updateOne({ email }, { password });
-
-      // delete code
-      user && (await Code.findOneAndRemove({ user: user._id }));
-
-      // send response
-      res.status(200).json({ message: "password updated" });
     } catch (err: any) {
       res.status(400).json({
         message: err.message,

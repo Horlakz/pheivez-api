@@ -87,6 +87,14 @@ export const forgotPassword = asyncHandler(
     // get inputs
     const { email } = req.body;
 
+    // generate 6 digit code
+    const code = Math.floor(Math.random() * 900000) + 100000;
+
+    const html = `
+      <h1>Reset Password</h1>
+      <p>You requested to reset your password. The code is ${code}</p>
+    `;
+
     try {
       // match user
       const user = await User.findOne({ email });
@@ -97,33 +105,20 @@ export const forgotPassword = asyncHandler(
         });
       }
 
-      // generate 6 digit code
-      const code = Math.floor(Math.random() * 900000) + 100000;
-
-      // send email
-      await sendEmail(
-        email,
-        "Reset Password",
-        `<p>You requested to reset your password. Your code is ${code}</p>`
-      );
-
       // if code exists, update it
-      // const codeExists = user && (await Code.findOne({ user: user._id }));
-      // if (codeExists) {
-      //   // update code
-      //   await Code.findOneAndUpdate(
-      //     { user: user._id },
-      //     { code },
-      //     { new: true }
-      //   );
+      const codeExists = user && (await Code.findOne({ user: user._id }));
+      if (codeExists) {
+        // update code
+        await Code.findOneAndUpdate({ user: user._id }, { code });
 
-      //   // send email
-      //   await sendEmail(
-      //     email,
-      //     "Reset Password",
-      //     `<p>You requested to reset your password. Your code is ${code}</p>`
-      //   );
-      // }
+        // send email
+        sendEmail(email, "Reset Password", html);
+
+        res.status(200).json({ message: "Code has been sent to email" });
+      }
+
+      // send code to email
+      sendEmail(email, "Reset Password", html);
 
       // save code to database
       user && (await Code.create({ user: user._id, code }));
@@ -174,9 +169,12 @@ export const resetPassword = asyncHandler(
             });
           }
 
-          // user["password"] = password;
-          // await user.save();
+          // update password
+          const salt = await bcrypt.genSalt(10);
+          const hash = await bcrypt.hash(password, salt);
+          await User.findByIdAndUpdate(user._id, { password: hash });
 
+          // remove code
           await Code.findOneAndRemove({ user: user._id });
 
           // send response

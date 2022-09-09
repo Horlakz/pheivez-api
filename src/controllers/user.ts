@@ -96,13 +96,17 @@ export const forgotPassword = asyncHandler(
     `;
 
     try {
+      if (!email) {
+        res.status(400).json({ message: "Email Field is empty" });
+        return;
+      }
+
       // match user
       const user = await User.findOne({ email });
 
       if (user === null || user === undefined) {
-        res.status(400).json({
-          message: "Email is not registered",
-        });
+        res.status(400).json({ message: "Email is not registered" });
+        return;
       }
 
       // if code exists, update it

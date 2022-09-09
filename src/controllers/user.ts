@@ -115,10 +115,11 @@ export const forgotPassword = asyncHandler(
         // update code
         await Code.findOneAndUpdate({ user: user._id }, { code });
 
-        // send email
+        // resend code email
         sendEmail(email, "Reset Password", html);
 
-        res.status(200).json({ message: "Code has been sent to email" });
+        res.status(200).json({ message: "Code has been resent to email" });
+        return;
       }
 
       // send code to email
@@ -148,6 +149,11 @@ export const resetPassword = asyncHandler(
     const { email, code, password } = req.body;
 
     try {
+      if (!email || !code || !password) {
+        res.status(400).json({ message: "Field(s) are empty" });
+        return;
+      }
+
       // match user
       const user = await User.findOne({ email });
 
@@ -155,6 +161,7 @@ export const resetPassword = asyncHandler(
         res.status(400).json({
           message: "Email is not registered",
         });
+        return;
       }
 
       if (user) {
@@ -164,6 +171,7 @@ export const resetPassword = asyncHandler(
           res.status(400).json({
             message: "Code does not exist",
           });
+          return;
         }
 
         if (codeExists) {
@@ -171,6 +179,7 @@ export const resetPassword = asyncHandler(
             res.status(400).json({
               message: "Invalid code",
             });
+            return;
           }
 
           // update password

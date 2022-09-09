@@ -3,7 +3,8 @@ import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import User from "../models/user";
 import Code from "../models/code";
-import { generateToken, sendEmail } from "../utils";
+import { generateToken } from "../utils";
+import sendEmail from "../config/email";
 
 // @desc create user
 // @route /auth/register

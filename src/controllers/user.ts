@@ -129,7 +129,7 @@ export const forgotPassword = asyncHandler(
       user && (await Code.create({ user: user._id, code }));
 
       // send response
-      res.status(200).json({ message: `code sent to ${email}` });
+      res.status(200).json({ message: "Code has been send to email" });
     } catch (err: any) {
       res.status(400).json({
         message: err.message,
@@ -191,13 +191,11 @@ export const resetPassword = asyncHandler(
           await Code.findOneAndRemove({ user: user._id });
 
           // send response
-          res.status(200).json({ message: "password updated" });
+          res.status(200).json({ message: "Password reset successful" });
         }
       }
     } catch (err: any) {
-      res.status(400).json({
-        message: err.message,
-      });
+      res.status(400).json({ message: err.message });
       console.log(err);
     }
   }

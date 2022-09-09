@@ -7,9 +7,9 @@
     "start": "node build/index",
     "dev": "nodemon src/index",
     "build": "tsc",
-    "test": "vitest run src",
-    "test:watch": "vitest src",
-    "test:preview": "vitest --ui src"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:preview": "vitest --ui"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

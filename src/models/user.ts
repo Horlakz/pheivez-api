@@ -1,5 +1,5 @@
-import { Document, Model, Schema, HydratedDocument, model } from "mongoose";
 import bcrypt from "bcryptjs";
+import { Document, model, Schema } from "mongoose";
 
 interface User extends Document {
   name: string;

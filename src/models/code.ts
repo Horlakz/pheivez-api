@@ -20,10 +20,7 @@ const codeSchema = new Schema<Code>(
       maxlength: [6, "Code must not be more than 6 characters"],
     },
   },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
+  { timestamps: true }
 );
 
 export default model<Code>("Code", codeSchema);

@@ -9,46 +9,41 @@ interface User extends Document {
   updatedAt: Date;
 }
 
-const userSchema = new Schema<User>(
-  {
-    name: {
-      type: String,
-      required: [true, "Name is required"],
-      minlength: 3,
-      maxlength: 30,
-    },
-    email: {
-      type: String,
-      required: [true, "Email is required"],
-      minlength: 3,
-      maxlength: 30,
-      lowercase: true,
-      unique: true,
-      validate: {
-        validator: (v: string) => /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v),
-        message: (props) => `${props.value} is not a valid email!`,
-      },
-    },
-    password: {
-      type: String,
-      required: [true, "Password is required"],
-      minlength: [6, "Password must be at least 6 characters long"],
-      maxlength: 30,
-    },
-    createdAt: {
-      type: Date,
-      immutable: true,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
+const userSchema = new Schema<User>({
+  name: {
+    type: String,
+    required: [true, "Name is required"],
+    minlength: 3,
+    maxlength: 30,
+  },
+  email: {
+    type: String,
+    required: [true, "Email is required"],
+    minlength: 3,
+    maxlength: 30,
+    lowercase: true,
+    unique: true,
+    validate: {
+      validator: (v: string) => /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v),
+      message: (props) => `${props.value} is not a valid email!`,
     },
   },
-  {
-    versionKey: false,
-  }
-);
+  password: {
+    type: String,
+    required: [true, "Password is required"],
+    minlength: [6, "Password must be at least 6 characters long"],
+    maxlength: 30,
+  },
+  createdAt: {
+    type: Date,
+    immutable: true,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
 userSchema.pre<User>("save", async function (next) {
   // get the current date and save it to the updatedAt field

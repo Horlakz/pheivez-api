@@ -22,7 +22,7 @@ services:
     depends_on:
       - mongo
     ports:
-      - 8000:${PORT}
+      - 5000:${PORT}
 
 volumes:
   mongo:

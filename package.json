@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node build/index",
     "dev": "nodemon src/index",
-    "build": "tsc",
+    "build": "tsc -p .",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:preview": "vitest --ui"

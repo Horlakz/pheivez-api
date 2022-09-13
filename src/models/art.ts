@@ -6,7 +6,7 @@ interface Art extends Document {
   image: string;
   price: number;
   sizes: string[];
-  tags: Schema.Types.ObjectId[];
+  tags: Schema.Types.Mixed;
 }
 
 const artSchema = new Schema<Art>(

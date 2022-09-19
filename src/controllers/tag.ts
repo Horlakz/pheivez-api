@@ -5,16 +5,14 @@ import Tag from "../models/tag";
 // @desc    Get all tags
 // @route   GET /tags
 // @access  Public
-export const getCategories = asyncHander(
-  async (req: Request, res: Response) => {
-    try {
-      const tags = await Tag.find();
-      res.status(200).json(tags);
-    } catch (err) {
-      if (err instanceof Error) res.status(400).json({ message: err.message });
-    }
+export const getTags = asyncHander(async (req: Request, res: Response) => {
+  try {
+    const tags = await Tag.find();
+    res.status(200).json(tags);
+  } catch (err) {
+    if (err instanceof Error) res.status(400).json({ message: err.message });
   }
-);
+});
 
 // @desc    create Tag
 // @route   POST /tags

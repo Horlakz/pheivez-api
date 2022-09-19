@@ -13,10 +13,17 @@ export const addSubscriber = asyncHandler(
     const { name, email } = req.body;
 
     try {
+      // check if email already exists
+      const checkEmail = await Subscriber.findOne({ email });
+      if (checkEmail) {
+        res.status(400).json({ message: "Email already exists" });
+        return;
+      }
+
       const subscriber = await Subscriber.create({ name, email });
 
       // send verification email
-      const verificationLink = `${process.env.BASE_URL}/subscribers/verify/${subscriber._id}`;
+      const verificationLink = `${process.env.BASE_URL}/verify/${subscriber._id}`;
 
       const message = `
         <h1>Thank you for subscribing to our newsletter</h1>
@@ -36,7 +43,7 @@ export const addSubscriber = asyncHandler(
 
 // @desc verify subscriber
 // @route /subscribers/verify/:id
-// @method GET
+// @method PUT
 // @access Public
 export const verifySubscriber = asyncHandler(
   async (req: Request, res: Response) => {
@@ -48,6 +55,11 @@ export const verifySubscriber = asyncHandler(
       const subscriber = await Subscriber.findById(id);
 
       if (subscriber) {
+        if (subscriber.isApproved) {
+          res.status(400).json({ message: "Subscriber already verified" });
+          return;
+        }
+
         // update subscriber
         subscriber.isApproved = true;
         await subscriber.save();
@@ -62,10 +74,12 @@ export const verifySubscriber = asyncHandler(
         sendEmail(subscriber.email, "Welcome to our newsletter", message);
 
         // send response
-        res.status(200).json({ message: "Email Verified Successfully" });
+        res.status(202).json({ message: "Email Verified Successfully" });
+        return;
+      } else {
+        res.status(404).json({ message: "Subscriber not found" });
+        return;
       }
-
-      res.status(404).json({ message: "Subscriber not found" });
     } catch (err: any) {
       res.status(400).json({ message: err.message });
     }
@@ -82,11 +96,18 @@ export const getSubscribers = asyncHandler(
     const { isApproved } = req.query;
 
     try {
-      // find subscribers
-      const subscribers = await Subscriber.find({ isApproved });
+      // check if query is provided
+      if (isApproved) {
+        // get subscribers
+        const subscribers = await Subscriber.find({ isApproved });
 
-      // send response
-      res.status(200).json(subscribers);
+        res.status(200).json(subscribers);
+      } else {
+        // get subscribers
+        const subscribers = await Subscriber.find();
+
+        res.status(200).json(subscribers);
+      }
     } catch (err: any) {
       res.status(400).json({ message: err.message });
     }
@@ -111,6 +132,7 @@ export const unsubscribe = asyncHandler(async (req: Request, res: Response) => {
 
       // send response
       res.status(200).json({ message: "Unsubscribed Successfully" });
+      return;
     }
 
     res.status(404).json({ message: "Subscriber not found" });

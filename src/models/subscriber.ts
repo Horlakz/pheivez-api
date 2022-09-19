@@ -3,6 +3,7 @@ import { Document, model, Schema } from "mongoose";
 interface Subscriber extends Document {
   name: string;
   email: string;
+  isApproved: boolean;
 }
 
 const subscriberSchema = new Schema<Subscriber>(
@@ -24,6 +25,10 @@ const subscriberSchema = new Schema<Subscriber>(
         validator: (v: string) => /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v),
         message: (props) => `${props.value} is not a valid email!`,
       },
+    },
+    isApproved: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true, versionKey: false }

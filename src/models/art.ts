@@ -16,7 +16,6 @@ const artSchema = new Schema<Art>(
   {
     slug: {
       type: String,
-      required: true,
       unique: true,
     },
     title: {
@@ -59,15 +58,9 @@ artSchema.pre("save", async function (next) {
   // check if slug already exists increment it
   const art = await model<Art>("Art").findOne({ slug });
   if (art) {
-    const slugArr = slug.split("-");
-    const last = slugArr[slugArr.length - 1];
-    const num = parseInt(last);
-    if (isNaN(num)) {
-      slugArr.push("1");
-    } else {
-      slugArr[slugArr.length - 1] = (num + 1).toString();
-    }
-    this.slug = slugArr.join("-");
+    this.slug = `${slug}-${new Date().getTime()}`;
+
+    return next();
   }
 
   this.slug = slug;

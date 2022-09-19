@@ -13,7 +13,7 @@ const router = Router();
 
 // mount routes
 router.use("/auth", userRoutes);
-router.use("/subscribers", newsLetterRoutes);
+router.use("/subscriber", newsLetterRoutes);
 router.use("/art", artRoutes);
 router.use("/category", categoryRoutes);
 router.use("/tag", tagRoutes);

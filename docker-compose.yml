@@ -16,7 +16,7 @@ services:
       dockerfile: ${PWD}/Dockerfile
     env_file:
       - .env
-    command: yarn start
+    command: yarn dev
     volumes:
       - .:/app/
     depends_on:

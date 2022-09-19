@@ -28,6 +28,7 @@ export const createCategory = asyncHander(
       const checkCategory = await Category.findOne({ name });
       if (checkCategory) {
         res.status(400).json({ message: "Category already exists" });
+        return;
       }
       const category = await Category.create({ name });
       res.status(201).json(category);
@@ -47,6 +48,7 @@ export const deleteCategory = asyncHander(
       const category = await Category.findByIdAndDelete(id);
       if (!category) {
         res.status(404).json({ message: "Category not found" });
+        return;
       }
       res.status(200).json({ message: "Category deleted" });
     } catch (err) {

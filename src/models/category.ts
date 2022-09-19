@@ -9,6 +9,7 @@ const categorySchema = new Schema<Category>(
     name: {
       type: String,
       required: [true, "Name is required"],
+      unique: true,
       minlength: 3,
       maxlength: 30,
     },

@@ -4,7 +4,7 @@ import Subscriber from "../models/subscriber";
 import sendEmail from "../config/email";
 
 // @desc add new subscriber
-// @route /subscribers
+// @route /subscriber
 // @method POST
 // @access Public
 export const addSubscriber = asyncHandler(
@@ -42,7 +42,7 @@ export const addSubscriber = asyncHandler(
 );
 
 // @desc verify subscriber
-// @route /subscribers/verify/:id
+// @route /subscriber/verify/:id
 // @method PUT
 // @access Public
 export const verifySubscriber = asyncHandler(
@@ -87,7 +87,7 @@ export const verifySubscriber = asyncHandler(
 );
 
 // @desc get all subscribers
-// @route /subscribers || /subscribers?isApproved=true
+// @route /subscriber || /subscribers?isApproved=true
 // @method GET
 // @access Private
 export const getSubscribers = asyncHandler(
@@ -115,7 +115,7 @@ export const getSubscribers = asyncHandler(
 );
 
 // @desc unsubscribe from newsletter
-// @route /subscribers/:id
+// @route /subscriber/:id
 // @method DELETE
 // @access Public
 export const unsubscribe = asyncHandler(async (req: Request, res: Response) => {

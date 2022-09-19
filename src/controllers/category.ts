@@ -25,7 +25,9 @@ export const createCategory = asyncHander(
 
     try {
       // check if category exists
-      const checkCategory = await Category.findOne({ name });
+      const checkCategory = await Category.findOne({
+        name: name.toLowerCase(),
+      });
       if (checkCategory) {
         res.status(400).json({ message: "Category already exists" });
         return;

@@ -22,7 +22,7 @@ export const createTag = asyncHander(async (req: Request, res: Response) => {
 
   try {
     // check if Tag exists
-    const checkTag = await Tag.findOne({ name });
+    const checkTag = await Tag.findOne({ name: name.toLowerCase() });
     if (checkTag) {
       res.status(400).json({ message: "Tag already exists" });
       return;

@@ -17,4 +17,9 @@ const tagSchema = new Schema<Tag>(
   { timestamps: true }
 );
 
+tagSchema.pre("save", async function (next) {
+  this.name = this.name.toLowerCase();
+  next();
+});
+
 export default model<Tag>("Tag", tagSchema);

@@ -17,4 +17,9 @@ const categorySchema = new Schema<Category>(
   { timestamps: true }
 );
 
+categorySchema.pre("save", async function (next) {
+  this.name = this.name.toLowerCase();
+  next();
+});
+
 export default model<Category>("Category", categorySchema);

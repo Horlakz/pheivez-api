@@ -21,10 +21,8 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
     res.status(201).json({
       token: generateToken(user._id),
     });
-  } catch (err: any) {
-    res.status(400).json({
-      message: err.message,
-    });
+  } catch (err) {
+    if (err instanceof Error) res.status(400).json({ message: err.message });
   }
 });
 
@@ -54,12 +52,8 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
       res.status(200).json({
         token: generateToken(user._id),
       });
-  } catch (err: any) {
-    res.status(400).json({
-      message: err.message,
-    });
-
-    console.log(err);
+  } catch (err) {
+    if (err instanceof Error) res.status(400).json({ message: err.message });
   }
 });
 
@@ -71,11 +65,8 @@ export const getUser = asyncHandler(async (req: Request, res: Response) => {
   try {
     // const user = await User.findById(req.user.id);
     res.status(200).json(req.user);
-  } catch (err: any) {
-    res.status(400).json({
-      message: err.message,
-    });
-    console.log(err);
+  } catch (err) {
+    if (err instanceof Error) res.status(400).json({ message: err.message });
   }
 });
 
@@ -131,11 +122,8 @@ export const forgotPassword = asyncHandler(
 
       // send response
       res.status(200).json({ message: "Code has been send to email" });
-    } catch (err: any) {
-      res.status(400).json({
-        message: err.message,
-      });
-      console.log(err);
+    } catch (err) {
+      if (err instanceof Error) res.status(400).json({ message: err.message });
     }
   }
 );
@@ -195,9 +183,8 @@ export const resetPassword = asyncHandler(
           res.status(200).json({ message: "Password reset successful" });
         }
       }
-    } catch (err: any) {
-      res.status(400).json({ message: err.message });
-      console.log(err);
+    } catch (err) {
+      if (err instanceof Error) res.status(400).json({ message: err.message });
     }
   }
 );

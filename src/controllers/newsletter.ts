@@ -35,8 +35,8 @@ export const addSubscriber = asyncHandler(
 
       // send response
       res.status(201).json({ message: "Email Verification Sent Successfully" });
-    } catch (err: any) {
-      res.status(400).json({ message: err.message });
+    } catch (err) {
+      if (err instanceof Error) res.status(400).json({ message: err.message });
     }
   }
 );
@@ -80,8 +80,8 @@ export const verifySubscriber = asyncHandler(
         res.status(404).json({ message: "Subscriber not found" });
         return;
       }
-    } catch (err: any) {
-      res.status(400).json({ message: err.message });
+    } catch (err) {
+      if (err instanceof Error) res.status(400).json({ message: err.message });
     }
   }
 );
@@ -108,8 +108,8 @@ export const getSubscribers = asyncHandler(
 
         res.status(200).json(subscribers);
       }
-    } catch (err: any) {
-      res.status(400).json({ message: err.message });
+    } catch (err) {
+      if (err instanceof Error) res.status(400).json({ message: err.message });
     }
   }
 );
@@ -136,7 +136,7 @@ export const unsubscribe = asyncHandler(async (req: Request, res: Response) => {
     }
 
     res.status(404).json({ message: "Subscriber not found" });
-  } catch (err: any) {
-    res.status(400).json({ message: err.message });
+  } catch (err) {
+    if (err instanceof Error) res.status(400).json({ message: err.message });
   }
 });

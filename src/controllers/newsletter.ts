@@ -102,11 +102,13 @@ export const getSubscribers = asyncHandler(
         const subscribers = await Subscriber.find({ isApproved });
 
         res.status(200).json(subscribers);
+        return;
       } else {
         // get subscribers
         const subscribers = await Subscriber.find();
 
         res.status(200).json(subscribers);
+        return;
       }
     } catch (err) {
       if (err instanceof Error) res.status(400).json({ message: err.message });

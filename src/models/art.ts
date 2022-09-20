@@ -4,7 +4,7 @@ import slugify from "slugify";
 interface Art extends Document {
   slug: string;
   title: string;
-  category: string;
+  category: Schema.Types.ObjectId;
   description: string;
   image: string;
   price: number;

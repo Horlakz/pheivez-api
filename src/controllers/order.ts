@@ -88,6 +88,33 @@ export const getOrder = asyncHander(async (req: Request, res: Response) => {
       return;
     }
 
+    const verifyPayment = await axios.get(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    switch (verifyPayment.data?.data?.status) {
+      case "success":
+        order.status = "approved";
+        break;
+      case "failed":
+        order.status = "cancelled";
+        break;
+      case "abandoned":
+        order.status = "cancelled";
+        break;
+      default:
+        order.status = "pending";
+        break;
+    }
+
+    await order.save();
+
     // send response
     res.status(200).json(order);
   } catch (err) {

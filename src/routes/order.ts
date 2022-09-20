@@ -19,6 +19,6 @@ router
   .route("/:reference")
   .get(getOrder)
   .put(protect, updateOrder)
-  .delete(deleteOrder);
+  .delete(protect, deleteOrder);
 
 export default router;

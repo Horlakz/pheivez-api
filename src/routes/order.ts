@@ -6,7 +6,6 @@ import {
   getOrder,
   updateOrder,
   deleteOrder,
-  verifyPayment,
 } from "../controllers/order";
 
 import { protect } from "../middlewares/auth";
@@ -21,6 +20,5 @@ router
   .get(getOrder)
   .put(protect, updateOrder)
   .delete(deleteOrder);
-router.route("/success").get(verifyPayment);
 
 export default router;

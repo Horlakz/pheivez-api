@@ -9,7 +9,7 @@ interface Art extends Document {
   image: string;
   price: number;
   sizes: string[];
-  tags: Schema.Types.Mixed;
+  tags: Schema.Types.ObjectId[];
 }
 
 const artSchema = new Schema<Art>(
@@ -43,11 +43,13 @@ const artSchema = new Schema<Art>(
       type: [String],
       required: [true, "Sizes are required"],
     },
-    tags: {
-      type: Schema.Types.Mixed,
-      ref: "Tag",
-      required: [true, "Tags is required"],
-    },
+    tags: [
+      {
+        type: Schema.Types.Mixed,
+        ref: "Tag",
+        required: [true, "Tags is required"],
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -64,6 +66,12 @@ artSchema.pre("save", async function (next) {
   }
 
   this.slug = slug;
+  next();
+});
+
+// populate category and tags
+artSchema.pre(/^find/, function (next) {
+  this.populate("category tags", "name");
   next();
 });
 

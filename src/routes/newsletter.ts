@@ -6,6 +6,7 @@ import {
   verifySubscriber,
   getSubscribers,
   unsubscribe,
+  sendNewsletter,
 } from "../controllers/newsletter";
 
 // initialize express router
@@ -18,6 +19,7 @@ import { protect } from "../middlewares/auth";
 router.route("/").post(addSubscriber).get(protect, getSubscribers);
 router.put("/verify/:id", verifySubscriber);
 router.delete("/:id", unsubscribe);
+router.post("/newsletter", protect, sendNewsletter);
 
 // export route(s)
 export default router;

@@ -43,13 +43,6 @@ export const createOrder = asyncHander(async (req: Request, res: Response) => {
         email,
         amount,
         callback_url: "http://localhost:5000/order/success",
-        metadata: {
-          name,
-          email,
-          country,
-          state,
-          city,
-        },
       },
       {
         headers: {
@@ -172,56 +165,3 @@ export const deleteOrder = asyncHander(async (req: Request, res: Response) => {
     if (err instanceof Error) res.status(400).json({ message: err.message });
   }
 });
-
-// @desc    Verify payment
-// @route   GET /order/success
-// @access  Public
-export const verifyPayment = asyncHander(
-  async (req: Request, res: Response) => {
-    try {
-      // get reference
-      const { reference } = req.query;
-
-      // check if reference is valid
-      if (!reference) {
-        res.status(400).json({ message: "Reference is required" });
-        return;
-      }
-
-      // verify payment
-      const paystack = await axios.get(
-        `https://api.paystack.co/transaction/verify/${reference}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // check if payment is successful
-      if (paystack.data?.data?.status !== "success") {
-        res.status(400).json({ message: "Payment not successful" });
-        return;
-      }
-
-      // get order
-      const order = await Order.findOne({ reference });
-
-      // check if order exists
-      if (!order) {
-        res.status(404).json({ message: "Order not found" });
-        return;
-      }
-
-      // update order
-      order.status = "paid";
-      await order.save();
-
-      // send response
-      res.status(200).json({ message: "Payment successful" });
-    } catch (err) {
-      if (err instanceof Error) res.status(400).json({ message: err.message });
-    }
-  }
-);

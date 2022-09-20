@@ -1,7 +1,13 @@
 import { Router } from "express";
 
 // get controllers
-import { createArt } from "../controllers/art";
+import {
+  createArt,
+  getArts,
+  getArt,
+  updateArt,
+  deleteArt,
+} from "../controllers/art";
 
 // import middlewares
 import { protect } from "../middlewares/auth";
@@ -10,6 +16,11 @@ import { protect } from "../middlewares/auth";
 const router = Router();
 
 // mount routes
-router.post("/", protect, createArt);
+router.route("/").post(protect, createArt).get(getArts);
+router
+  .route("/:slug")
+  .get(getArt)
+  .put(protect, updateArt)
+  .delete(protect, deleteArt);
 
 export default router;

@@ -153,6 +153,11 @@ export const sendNewsletter = asyncHandler(
     const { title, message } = req.body;
 
     try {
+      if (!title || !message) {
+        res.status(400).json({ message: "Please provide title and message" });
+        return;
+      }
+
       // get subscribers
       const subscribers = await Subscriber.find({ isApproved: true });
 

@@ -11,12 +11,13 @@ import {
 
 // import middlewares
 import { protect } from "../middlewares/auth";
+import upload from "../config/multer";
 
 // initialize express router
 const router = Router();
 
 // mount routes
-router.route("/").post(protect, createArt).get(getArts);
+router.route("/").post(upload.single("image"), protect, createArt).get(getArts);
 router
   .route("/:slug")
   .get(getArt)

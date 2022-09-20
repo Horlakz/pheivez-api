@@ -21,6 +21,6 @@ router
   .get(getOrder)
   .put(protect, updateOrder)
   .delete(deleteOrder);
-router.route("/order/success").get(verifyPayment);
+router.route("/success").get(verifyPayment);
 
 export default router;

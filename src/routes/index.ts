@@ -1,3 +1,5 @@
+import { getFile } from "../config/media";
+
 // express router
 import { Router } from "express";
 
@@ -7,6 +9,7 @@ import newsLetterRoutes from "./newsletter";
 import artRoutes from "./art";
 import categoryRoutes from "./category";
 import tagRoutes from "./tag";
+import mediaRoutes from "./media";
 
 // initialize express router
 const router = Router();
@@ -17,6 +20,7 @@ router.use("/subscriber", newsLetterRoutes);
 router.use("/art", artRoutes);
 router.use("/category", categoryRoutes);
 router.use("/tag", tagRoutes);
+router.use("/media", mediaRoutes);
 
 // export router
 export default router;

@@ -15,5 +15,6 @@ namespace NodeJS {
     AWS_BUCKET_REGION: string;
     AWS_ACCESS_KEY: string;
     AWS_SECRET_KEY: string;
+    PAYSTACK_SECRET_KEY: string;
   }
 }

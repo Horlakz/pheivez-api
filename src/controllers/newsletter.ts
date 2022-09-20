@@ -142,3 +142,29 @@ export const unsubscribe = asyncHandler(async (req: Request, res: Response) => {
     if (err instanceof Error) res.status(400).json({ message: err.message });
   }
 });
+
+// @desc send newsletter
+// @route /subscriber/newsletter
+// @method POST
+// @access Private
+export const sendNewsletter = asyncHandler(
+  async (req: Request, res: Response) => {
+    // get inputs
+    const { title, message } = req.body;
+
+    try {
+      // get subscribers
+      const subscribers = await Subscriber.find({ isApproved: true });
+
+      // send newsletter to all subscribers
+      subscribers.forEach((subscriber) => {
+        sendEmail(subscriber.email, title, message);
+      });
+
+      // send response
+      res.status(200).json({ message: "Newsletter Sent Successfully" });
+    } catch (err) {
+      if (err instanceof Error) res.status(400).json({ message: err.message });
+    }
+  }
+);

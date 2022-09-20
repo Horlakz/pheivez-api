@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
+import fs from "fs";
 import sendEmail from "../config/email";
+import { uploadFile } from "../config/media";
 import Art from "../models/art";
 import Subscriber from "../models/subscriber";
 
@@ -8,34 +10,49 @@ import Subscriber from "../models/subscriber";
 // @route   POST /art
 // @access  Private
 export const createArt = asyncHandler(async (req: Request, res: Response) => {
-  const { category, title, description, price, sizes, image, tags } = req.body;
+  const { category, title, description, price, sizes, tags } = req.body;
 
   try {
-    const art = await Art.create({
-      category,
-      title,
-      description,
-      price,
-      sizes,
-      image,
-      tags,
-    });
+    if (!category || !title || !description || !price || !sizes || !tags) {
+      res.status(400).json({ message: "All fields are required" });
+      return;
+    }
 
-    const subscribers = await Subscriber.find();
+    if (req.file) {
+      // upload file to aws s3
+      const image = await uploadFile(req.file);
 
-    subscribers.forEach(async (subscriber) => {
-      await sendEmail(
-        subscriber.email,
-        "New Artwork Added",
-        `<h1>Hi ${subscriber.name}</h1>
-          <p>A new artwork has been added to the gallery. Check it out
-            <a href="https://pheivez.vercel.app/art/${art.slug}">here</a>!
-          </p>
-          <p>Regards,<br>Pheivez Art</p>`
-      );
-    });
+      // remove file from server
+      fs.unlinkSync(req.file.path);
 
-    res.status(201).json(art);
+      const art = await Art.create({
+        category,
+        title,
+        description,
+        price,
+        sizes,
+        image: image.Key,
+        tags,
+      });
+      const subscribers = await Subscriber.find();
+
+      subscribers.forEach(async (subscriber) => {
+        await sendEmail(
+          subscriber.email,
+          "New Artwork Added",
+          `<h1>Hi ${subscriber.name}</h1>
+            <p>A new artwork has been added to the gallery. Check it out
+              <a href="https://pheivez.vercel.app/art/${art.slug}">here</a>!
+            </p>
+            <p>Regards,<br>Pheivez Art</p>`
+        );
+      });
+
+      res.status(201).json(art);
+      return;
+    }
+
+    res.status(400).json({ message: "Image is required" });
   } catch (err) {
     if (err instanceof Error) res.status(400).json({ message: err.message });
   }

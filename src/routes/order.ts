@@ -14,7 +14,7 @@ import { protect } from "../middlewares/auth";
 const router = Router();
 
 // mount routes
-router.route("/").get(getOrders).post(createOrder);
+router.route("/").get(protect, getOrders).post(createOrder);
 router
   .route("/:reference")
   .get(getOrder)

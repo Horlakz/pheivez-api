@@ -42,7 +42,7 @@ export const createOrder = asyncHander(async (req: Request, res: Response) => {
       {
         email,
         amount,
-        callback_url: "http://localhost:5000/order/success",
+        callback_url: `${process.env.BASE_URL}/order/success`,
       },
       {
         headers: {

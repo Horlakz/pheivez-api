@@ -1,5 +1,6 @@
 import { Document, model, Schema } from "mongoose";
 import slugify from "slugify";
+import { deleteFile } from "../config/media";
 
 interface Art extends Document {
   slug: string;
@@ -72,6 +73,16 @@ artSchema.pre("save", async function (next) {
 // populate category and tags
 artSchema.pre(/^find/, function (next) {
   this.populate("category tags", "name");
+  next();
+});
+
+artSchema.pre("remove", async function (next) {
+  const art = this;
+  const { image } = art;
+
+  // delete image from aws s3
+  await deleteFile(image);
+
   next();
 });
 

@@ -9,6 +9,7 @@ export const getCountries = asyncHander(async (req: Request, res: Response) => {
   if (req.query.available) {
     const countries = await Country.find({ available: true });
     res.json(countries);
+    return;
   }
   const countries = await Country.find();
   res.json(countries);
@@ -21,6 +22,7 @@ export const getStates = asyncHander(async (req: Request, res: Response) => {
   if (req.query.available) {
     const states = await State.find({ available: true });
     res.json(states);
+    return;
   }
   const states = await State.find();
   res.json(states);
@@ -33,6 +35,7 @@ export const getCities = asyncHander(async (req: Request, res: Response) => {
   if (req.query.available) {
     const cities = await City.find({ available: true });
     res.json(cities);
+    return;
   }
   const cities = await City.find();
   res.json(cities);

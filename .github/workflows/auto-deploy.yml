@@ -29,7 +29,7 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker compose build --force-rm --no-cache
+          docker build . -t pheivez-api:${{ github.sha }}
 
   run:
     runs-on: self-hosted
@@ -38,6 +38,10 @@ jobs:
       - build
 
     steps:
-      - name: Run Docker images
+      - name: remove old container
         run: |
-          docker compose up -d --remove-orphans
+          docker rm --force pheivez-api
+
+      - name: run new container
+        run: |
+          docker run -d --name pheivez-api -p 3000:3000 pheivez-api:${{ github.sha }}

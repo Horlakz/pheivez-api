@@ -23,6 +23,12 @@ jobs:
           envkey_EMAIL: ${{ secrets.EMAIL }}
           envkey_EMAIL_USER: ${{ secrets.EMAIL_USER }}
           envkey_EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          envkey_AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          envkey_AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+          envkey_AWS_BUCKET_REGION: ${{ secrets.AWS_BUCKET_REGION }}
+          envkey_AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          envkey_BASE_URL: ${{ secrets.BASE_URL }}
+          envkey_PAYSTACK_SECRET_KEY: ${{ secrets.PAYSTACK_SECRET_KEY }}
 
           file_name: .env
           fail_on_empty: false

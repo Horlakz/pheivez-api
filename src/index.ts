@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === "development") {
 
 // cors middleware
 app.use(
-  cors({ origin: CORS_ORIGIN })
+  cors({ origin: process.env.CORS_ORIGIN })
 );
 
 // routes middeware

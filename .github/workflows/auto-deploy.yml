@@ -12,34 +12,42 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Generate .env file
-        uses: SpicyPizza/create-envfile@v1.3
-        with:
-          envkey_PORT: ${{ secrets.PORT }}
+      # - name: Generate .env file
+      #   uses: SpicyPizza/create-envfile@v1.3
+      #   with:
+      #     envkey_PORT: ${{ secrets.PORT }}
+      #     envkey_NODE_ENV: ${{ secrets.NODE_ENV }}
+      #     envkey_CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
+      #     envkey_BASE_URL: ${{ secrets.BASE_URL }}
+      #     envkey_MONGO_URI: ${{ secrets.MONGO_URI }}
+      #     envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      #     envkey_JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+      #     envkey_EMAIL: ${{ secrets.EMAIL }}
+      #     envkey_EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      #     envkey_EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      #     envkey_AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      #     envkey_AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+      #     envkey_AWS_BUCKET_REGION: ${{ secrets.AWS_BUCKET_REGION }}
+      #     envkey_AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      #     envkey_PAYSTACK_SECRET_KEY: ${{ secrets.PAYSTACK_SECRET_KEY }}
 
-          envkey_NODE_ENV: ${{ secrets.NODE_ENV }}
-          envkey_CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
-
-          envkey_MONGO_URI: ${{ secrets.MONGO_URI }}
-
-          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          envkey_JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
-
-          envkey_EMAIL: ${{ secrets.EMAIL }}
-          envkey_EMAIL_USER: ${{ secrets.EMAIL_USER }}
-          envkey_EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-
-          envkey_AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-          envkey_AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-          envkey_AWS_BUCKET_REGION: ${{ secrets.AWS_BUCKET_REGION }}
-          envkey_AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-
-          envkey_BASE_URL: ${{ secrets.BASE_URL }}
-
-          envkey_PAYSTACK_SECRET_KEY: ${{ secrets.PAYSTACK_SECRET_KEY }}
-
-          file_name: .env
-          fail_on_empty: false
+      - name: create .env file
+        run: |
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+          echo "CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}" >> .env
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> .env
+          echo "EMAIL=${{ secrets.EMAIL }}" >> .env
+          echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> .env
+          echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
+          echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
+          echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> .env
+          echo "AWS_BUCKET_REGION=${{ secrets.AWS_BUCKET_REGION }}" >> .env
+          echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> .env
+          echo "PAYSTACK_SECRET_KEY=${{ secrets.PAYSTACK_SECRET_KEY }}" >> .env
 
       - name: Build Docker images
         run: |

@@ -24,20 +24,8 @@ if (process.env.NODE_ENV === "development") {
   app.use(logger("dev"));
 }
 
-// set request header
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  next();
-});
-
 // cors middleware
-app.use(
-  cors({ origin: process.env.CORS_ORIGIN })
-);
+app.use(cors());
 
 // routes middeware
 app.use("/api/v1/", routes);

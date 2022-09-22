@@ -29,6 +29,7 @@ jobs:
           envkey_AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
           envkey_BASE_URL: ${{ secrets.BASE_URL }}
           envkey_PAYSTACK_SECRET_KEY: ${{ secrets.PAYSTACK_SECRET_KEY }}
+          envkey_CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
 
           file_name: .env
           fail_on_empty: false

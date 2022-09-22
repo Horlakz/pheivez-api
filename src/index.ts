@@ -26,10 +26,7 @@ if (process.env.NODE_ENV === "development") {
 
 // cors middleware
 app.use(
-  cors({
-    origin:
-      "http://localhost:4252, https://pheivez.netlify.app, https://pheivez.com",
-  })
+  cors({ origin: CORS_ORIGIN })
 );
 
 // routes middeware

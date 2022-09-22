@@ -24,6 +24,21 @@ if (process.env.NODE_ENV === "development") {
   app.use(logger("dev"));
 }
 
+// set request header
+app.use((req, res, next) => {
+  const allowedOrigins = process.env.CORS_ORIGIN!.split(' ')
+  const origin = req.headers.origin!
+  if (allowedOrigins.includes(origin)) {
+     res.header("Access-Control-Allow-Origin", origin);
+  }
+
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  next();
+});
+
 // cors middleware
 app.use(
   cors({ origin: process.env.CORS_ORIGIN })

@@ -26,7 +26,7 @@ const countrySchema = new Schema<Country>(
     },
     available: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   { timestamps: true, versionKey: false }
@@ -46,7 +46,7 @@ const stateSchema = new Schema<State>(
     },
     available: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   { timestamps: true, versionKey: false }
@@ -59,17 +59,17 @@ const citySchema = new Schema<City>(
       required: [true, "Name is required"],
       unique: true,
     },
-    state: {
-      type: Schema.Types.ObjectId,
-      ref: "State",
-      required: [true, "State is required"],
-    },
+    // state: {
+      // type: Schema.Types.ObjectId,
+      // ref: "State",
+      // required: [true, "State is required"],
+    // },
     available: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
-  { timestamps: true, versionKey: false }
+  { timestamps: true }
 );
 
 export const Country = model<Country>("Country", countrySchema);

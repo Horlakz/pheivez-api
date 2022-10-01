@@ -1,6 +1,3 @@
-import { getFile } from "../config/media";
-
-// express router
 import { Router } from "express";
 
 // app routes

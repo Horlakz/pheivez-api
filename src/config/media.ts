@@ -19,7 +19,7 @@ export const uploadFile = (file: Express.Multer.File) => {
   return s3.upload(uploadParams).promise();
 };
 
-export const getFile = (fileKey: string) => {
+export const streamFile = (fileKey: string) => {
   const downloadParams = {
     Key: fileKey,
     Bucket: process.env.AWS_BUCKET_NAME!,

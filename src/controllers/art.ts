@@ -31,7 +31,7 @@ export const createArt = asyncHandler(async (req: Request, res: Response) => {
         description,
         price,
         sizes,
-        image: image.Key,
+        image: image.Key.split('/')[2],
         tags,
       });
       const subscribers = await Subscriber.find();

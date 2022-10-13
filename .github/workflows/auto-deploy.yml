@@ -48,4 +48,4 @@ jobs:
 
       - name: run new container
         run: |
-          docker run -d --name pheivez-api -p 1000:4242 pheivez-api:${{ github.sha }}
+          docker run -d --name pheivez-api -p 3300:4242 pheivez-api:${{ github.sha }}
